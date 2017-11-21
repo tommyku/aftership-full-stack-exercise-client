@@ -1,12 +1,19 @@
 import { push } from 'react-router-redux';
-
-export const LOGIN = 'LOGIN';
+import store from 'store';
 
 export const login = ({ username, password }) => {
-  return () => {
+  return (dispatch) => {
     const body = JSON.stringify({ username, password });
-    return fetch('http://localhost:8080/user/sign_in', { method: 'POST', body })
-      .then((res) => (res.ok ? loginSuccess(res) : loginFailure(res)));
+    const request = {
+      method: 'POST',
+      body,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    return fetch('http://localhost:8080/user/sign_in', request)
+      .then((res) => (res.ok ? authSuccess(dispatch, res) : loginFailure(res)));
   };
 };
 
@@ -22,22 +29,39 @@ export const signUp = ({ username, password, appId }) => {
       }
     };
     return fetch('http://localhost:8080/user/sign_up', request)
-      .then((res) => (res.ok ? signUpSuccess(dispatch, res) : signUpFailure(res)));
+      .then((res) => (res.ok ? authSuccess(dispatch, res) : signUpFailure(res)));
   };
 };
 
-function signUpSuccess(dispatch, res) {
+export const tokenCheck = (token) => {
+  return (dispatch) => {
+    const request = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+        'x-access-token': token
+      }
+    };
+    return fetch('http://localhost:8080/user', request)
+      .then((res) => (res.ok ? authSuccess(dispatch, res) : loginFailure(res)));
+  };
+};
+
+function authSuccess(dispatch, res) {
   res.json()
-    .then(console.log);
-  dispatch(push('/'));
+    .then((response) => {
+      const { username, appId, token } = response.success;
+      const user = { username, appId, token };
+
+      store.set('user', user);
+
+      dispatch({ type: 'AUTH_SUCCESS', payload: user });
+      dispatch(push('/'));
+    });
 }
 
 function signUpFailure(res) {
-  res.json()
-    .then(console.log);
-}
-
-function loginSuccess(res) {
   res.json()
     .then(console.log);
 }

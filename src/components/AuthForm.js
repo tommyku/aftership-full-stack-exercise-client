@@ -8,6 +8,12 @@ class AuthForm extends Component {
     this.handleLogin = this.handleLogin.bind(this);
   }
 
+  componentWillMount() {
+    if (this.props.user.token && this.props.login) {
+      this.props.handleTokenCheck(this.props.user.token);
+    }
+  }
+
   handleLogin(e) {
     e.preventDefault();
     const username = this.refs['username'].value;
