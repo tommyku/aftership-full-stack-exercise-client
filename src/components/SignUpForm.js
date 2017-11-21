@@ -9,7 +9,7 @@ class SignUpForm extends Component {
   }
 
   componentWillMount() {
-    if (this.props.user.token && this.props.login) {
+    if (this.props.user.token && this.props.login && !this.props.tokenChecked) {
       this.props.handleTokenCheck(this.props.user.token);
     }
   }
@@ -51,7 +51,8 @@ class SignUpForm extends Component {
 }
 
 SignUpForm.propTypes = {
-  handleSignUp: PropTypes.func.isRequired
+  handleSignUp: PropTypes.func.isRequired,
+  handleTokenCheck: PropTypes.func.isRequired
 };
 
 export default SignUpForm;

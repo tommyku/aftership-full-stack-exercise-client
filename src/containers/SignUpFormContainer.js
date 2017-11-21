@@ -4,8 +4,9 @@ import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   const login = state.converty.flags.login;
+  const tokenChecked = state.converty.flags.tokenChecked;
   const user = state.converty.user;
-  return { user, login };
+  return { user, login, tokenChecked };
 };
 
 const mapDispatchToProps = (dispatch) => {

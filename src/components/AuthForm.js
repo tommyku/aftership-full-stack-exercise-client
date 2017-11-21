@@ -9,7 +9,7 @@ class AuthForm extends Component {
   }
 
   componentWillMount() {
-    if (this.props.user.token && this.props.login) {
+    if (this.props.user.token && this.props.login && !this.props.tokenChecked) {
       this.props.handleTokenCheck(this.props.user.token);
     }
   }
@@ -46,7 +46,8 @@ class AuthForm extends Component {
 }
 
 AuthForm.propTypes = {
-  handleLogin: PropTypes.func.isRequired
+  handleLogin: PropTypes.func.isRequired,
+  handleTokenCheck: PropTypes.func.isRequired
 };
 
 export default AuthForm;
