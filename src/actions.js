@@ -1,3 +1,5 @@
+import { push } from 'react-router-redux';
+
 export const LOGIN = 'LOGIN';
 
 export const login = ({ username, password }) => {
@@ -9,7 +11,7 @@ export const login = ({ username, password }) => {
 };
 
 export const signUp = ({ username, password, appId }) => {
-  return () => {
+  return (dispatch) => {
     const body = JSON.stringify({ username, password, appId });
     const request = {
       method: 'POST',
@@ -20,13 +22,14 @@ export const signUp = ({ username, password, appId }) => {
       }
     };
     return fetch('http://localhost:8080/user/sign_up', request)
-      .then((res) => (res.ok ? signUpSuccess(res) : signUpFailure(res)));
+      .then((res) => (res.ok ? signUpSuccess(dispatch, res) : signUpFailure(res)));
   };
 };
 
-function signUpSuccess(res) {
+function signUpSuccess(dispatch, res) {
   res.json()
     .then(console.log);
+  dispatch(push('/'));
 }
 
 function signUpFailure(res) {
