@@ -4,6 +4,7 @@ const user = store.get('user') || {};
 const favoriteCurrencies = store.get('favoriteCurrencies') || [];
 const currencies = store.get('currencies') || {};
 const currentConversion = store.get('currentConversion') || {};
+const conversionResult = store.get('conversionResult') || {};
 
 const flags = {
   login: (user['username'] && user['appId'] && user['token']) !== null,
@@ -15,7 +16,8 @@ const initialState = {
   favoriteCurrencies,
   currencies,
   flags,
-  currentConversion
+  currentConversion,
+  conversionResult
 };
 
 const convertyApp = (state = initialState, action) => {
@@ -33,6 +35,10 @@ const convertyApp = (state = initialState, action) => {
           login: true,
           tokenChecked: true
         }
+      });
+    case 'LOCAL_CONVERSION':
+      return Object.assign({}, state, {
+        conversionResult: action.payload
       });
     case 'FETCH_FAVORITE':
       return Object.assign({}, state, {

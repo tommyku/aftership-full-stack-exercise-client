@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const CurrencySelection = (props) => (
-  <select name={ props.name } id={ props.name } ref={ props.setRef }>
+const CurrencySelection = ({ setRef, currencies, name, ...others }) => (
+  <select name={ name } id={ name } ref={ setRef } { ...others }>
     {
-      Object.keys(props.currencies).map((code, index) => (
+      Object.keys(currencies).map((code, index) => (
         <option value={ code } key={ `from-${index}` }>
-          { props.currencies[code] }
+          { `${code} (${currencies[code]})` }
         </option>
       ))
     }
@@ -20,17 +20,27 @@ class ConversionForm extends Component {
   }
 
   componentDidMount() {
-    if (Object.keys(this.props.currencies).length === 0) {
+    const isEmptyCurrencies = Object.keys(this.props.currencies).length === 0;
+
+    const isEmptyConversion = Object.keys(this.props.currentConversion).length === 0;
+    const isStaleConversion = ((new Date()).getTime() / 1000 - this.props.currentConversion.timestamp) / 86400 > 1;
+    const isAppIdAvailable = this.props.user && this.props.user.appId;
+
+    if (isEmptyCurrencies) {
       this.props.getCurrencies();
+    }
+    if (isAppIdAvailable && (isStaleConversion || isEmptyConversion)) {
+      this.props.getConversions(this.props.user.appId);
     }
   }
 
   handleGetConversion() {
     const amount = parseFloat(this.refs['amount'].value);
     const from = this.selectFrom.value;
-    const appId = this.props.user.appId;
     const to = this.selectTo.value;
-    this.props.getConversion({ from, to, amount, appId });
+    this.props.localConversion({
+      from, to, amount, currentConversion: this.props.currentConversion
+    });
   }
 
   render() {
@@ -40,29 +50,39 @@ class ConversionForm extends Component {
           <label htmlFor='from'>From</label>
           <CurrencySelection name='from'
             currencies={ this.props.currencies }
+            defaultValue={ this.props.conversionResult.from }
             setRef={ (select) => this.selectFrom = select } />
         </div>
         <div>
           <label htmlFor='to'>To</label>
           <CurrencySelection name='to'
             currencies={ this.props.currencies }
+            defaultValue={ this.props.conversionResult.to }
             setRef={ (select) => this.selectTo = select } />
         </div>
         <div>
           <label htmlFor='amount'>Amount</label>
-          <input type='number' step='0.01' min='0' ref='amount' />
+          <input type='number'
+            step='0.01'
+            min='0'
+            ref='amount'
+            defaultValue={ this.props.conversionResult.amount } />
         </div>
         <div>
           <button type='button' onClick={ this.handleGetConversion }>Convert</button>
         </div>
+        <div>
+          { this.props.conversionResult.resultAmount }
+        </div>
       </form>
     );
   }
-}
 
+}
 ConversionForm.propTypes = {
   getCurrencies: PropTypes.func.isRequired,
-  getConversion: PropTypes.func.isRequired
+  getConversions: PropTypes.func.isRequired,
+  localConversion: PropTypes.func.isRequired
 };
 
 export default ConversionForm;

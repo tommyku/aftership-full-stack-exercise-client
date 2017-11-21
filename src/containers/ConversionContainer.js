@@ -1,12 +1,13 @@
 import { ConversionForm } from '../components';
-import { getCurrencies, getConversion } from '../actions';
+import { getCurrencies, getConversions, localConversion } from '../actions';
 import { connect } from 'react-redux';
 
 const mapStateToProps = (state) => {
   return {
     user: state.converty.user,
     currencies: state.converty.currencies,
-    currentConversion: state.converty.currentConversion
+    currentConversion: state.converty.currentConversion,
+    conversionResult: state.converty.conversionResult
   };
 };
 
@@ -15,8 +16,13 @@ const mapDispatchToProps = (dispatch) => {
     getCurrencies: () => {
       dispatch(getCurrencies());
     },
-    getConversion: ({ from, to, amount, appId }) => {
-      dispatch(getConversion({ from, to, amount, appId }));
+    getConversions: (appId) => {
+      dispatch(getConversions(appId));
+    },
+    localConversion: ({ from, to, amount, currentConversion }) => {
+      dispatch(localConversion({
+        from, to, amount, currentConversion
+      }));
     }
   };
 };
