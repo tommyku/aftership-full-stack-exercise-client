@@ -3,6 +3,7 @@ import store from 'store';
 const user = store.get('user') || {};
 const favoriteCurrencies = store.get('favoriteCurrencies') || [];
 const currencies = store.get('currencies') || {};
+const currentConversion = store.get('currentConversion') || {};
 
 const flags = {
   login: (user['username'] && user['appId'] && user['token']) !== null,
@@ -13,7 +14,8 @@ const initialState = {
   user,
   favoriteCurrencies,
   currencies,
-  flags
+  flags,
+  currentConversion
 };
 
 const convertyApp = (state = initialState, action) => {
@@ -35,6 +37,10 @@ const convertyApp = (state = initialState, action) => {
     case 'FETCH_FAVORITE':
       return Object.assign({}, state, {
         favoriteCurrencies: action.payload.currencies
+      });
+    case 'GET_CONVERSION':
+      return Object.assign({}, state, {
+        currentConversion: action.payload
       });
     case 'GET_CURRENCIES':
       return Object.assign({}, state, {

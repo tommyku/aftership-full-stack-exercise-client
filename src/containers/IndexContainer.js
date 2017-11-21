@@ -1,5 +1,5 @@
 import { IndexForm } from '../components';
-import { getUserCurrencies, getCurrencies } from '../actions';
+import { getUserCurrencies } from '../actions';
 import { push } from 'react-router-redux';
 import { connect } from 'react-redux';
 
@@ -8,8 +8,7 @@ const mapStateToProps = (state) => {
     user: state.converty.user,
     tokenChecked: state.converty.flags.tokenChecked,
     login: state.converty.flags.login,
-    favoriteCurrencies: state.converty.favoriteCurrencies,
-    currencies: state.converty.currencies
+    favoriteCurrencies: state.converty.favoriteCurrencies
   };
 };
 
@@ -20,9 +19,6 @@ const mapDispatchToProps = (dispatch) => {
     },
     redirectToLogin: () => {
       dispatch(push('/auth'));
-    },
-    getCurrencies: () => {
-      dispatch(getCurrencies());
     }
   };
 };

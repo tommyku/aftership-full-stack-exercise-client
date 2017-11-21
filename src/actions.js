@@ -77,6 +77,21 @@ export const getCurrencies = () => {
   };
 };
 
+export const getConversion = ({ from, to, amount, appId }) => {
+  return (dispatch) => {
+    const request = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    };
+    const url = `https://openexchangerates.org/api/convert/${amount}/${from}/${to}?app_id=${appId}`;
+    return fetch(url, request)
+      .then((res) => (res.ok ? getConversionSuccess(dispatch, res) : noOpsFailure()));
+  };
+};
+
 function authSuccess(dispatch, res) {
   res.json()
     .then((response) => {
@@ -85,8 +100,9 @@ function authSuccess(dispatch, res) {
 
       store.set('user', user);
 
-      dispatch({ type: '@@converty/AUTH_SUCCESS', payload: user });
-      dispatch(push('/'));
+      return dispatch({ type: '@@converty/AUTH_SUCCESS', payload: user });
+    }).then(() => {
+      return dispatch(push('/'));
     });
 }
 
@@ -95,6 +111,18 @@ function getCurrenciesSuccess(dispatch, res) {
     .then((response) => {
       store.set('currencies', response);
       dispatch({ type: '@@converty/GET_CURRENCIES', payload: response });
+    });
+}
+
+function getConversionSuccess(dispatch, res) {
+  res.json()
+    .then((apiResponse) => {
+      const { request: { amount, from, to }, response, meta: { timestamp } } = apiResponse;
+      const currentConversion = {
+        amount, from, to, result: response, timestamp
+      };
+      store.set('currentConversion', currentConversion);
+      dispatch({ type: '@@converty/GET_CONVERSION', payload: currentConversion });
     });
 }
 

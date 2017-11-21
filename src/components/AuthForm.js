@@ -14,8 +14,7 @@ class AuthForm extends Component {
     }
   }
 
-  handleLogin(e) {
-    e.preventDefault();
+  handleLogin() {
     const username = this.refs['username'].value;
     const password = this.refs['password'].value;
     this.props.handleLogin({ username, password });

@@ -14,8 +14,7 @@ class SignUpForm extends Component {
     }
   }
 
-  handleSignUp(e) {
-    e.preventDefault();
+  handleSignUp() {
     const username = this.refs['username'].value;
     const password = this.refs['password'].value;
     const appId = this.refs['appId'].value;
