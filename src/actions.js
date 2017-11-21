@@ -63,6 +63,20 @@ export const getUserCurrencies = (token) => {
   };
 };
 
+export const getCurrencies = () => {
+  return (dispatch) => {
+    const request = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    };
+    return fetch('https://openexchangerates.org/api/currencies.json', request)
+      .then((res) => (res.ok ? getCurrenciesSuccess(dispatch, res) : noOpsFailure()));
+  };
+};
+
 function authSuccess(dispatch, res) {
   res.json()
     .then((response) => {
@@ -73,6 +87,14 @@ function authSuccess(dispatch, res) {
 
       dispatch({ type: '@@converty/AUTH_SUCCESS', payload: user });
       dispatch(push('/'));
+    });
+}
+
+function getCurrenciesSuccess(dispatch, res) {
+  res.json()
+    .then((response) => {
+      store.set('currencies', response);
+      dispatch({ type: '@@converty/GET_CURRENCIES', payload: response });
     });
 }
 
@@ -91,7 +113,8 @@ function tokenActionFailure(dispatch) {
   store.set('user', null);
   store.set('favoriteCurrencies', null);
 
-  dispatch(push('/'));
+  dispatch({ type: 'TOKEN_ACTION_FAILURE', payload: {} });
+  dispatch(push('/auth'));
 }
 
 function signUpFailure(res) {
@@ -100,4 +123,8 @@ function signUpFailure(res) {
 }
 
 function loginFailure(res) {
+}
+
+function noOpsFailure() {
+  // do nothing
 }

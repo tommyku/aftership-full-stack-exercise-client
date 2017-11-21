@@ -2,6 +2,7 @@ import store from 'store';
 
 const user = store.get('user') || {};
 const favoriteCurrencies = store.get('favoriteCurrencies') || [];
+const currencies = store.get('currencies') || {};
 
 const flags = {
   login: (user['username'] && user['appId'] && user['token']) !== null,
@@ -11,6 +12,7 @@ const flags = {
 const initialState = {
   user,
   favoriteCurrencies,
+  currencies,
   flags
 };
 
@@ -33,6 +35,10 @@ const convertyApp = (state = initialState, action) => {
     case 'FETCH_FAVORITE':
       return Object.assign({}, state, {
         favoriteCurrencies: action.payload.currencies
+      });
+    case 'GET_CURRENCIES':
+      return Object.assign({}, state, {
+        currencies: action.payload
       });
     case 'TOKEN_ACTION_FAILURE':
     case 'AUTH_FAILURE':
