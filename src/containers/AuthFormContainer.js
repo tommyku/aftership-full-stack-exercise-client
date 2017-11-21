@@ -1,4 +1,4 @@
-import { LoginForm } from '../components';
+import { AuthForm } from '../components';
 import { login } from '../actions';
 import { connect } from 'react-redux';
 
@@ -9,14 +9,14 @@ const mapStateToProps = () => {
 const mapDispatchToProps = (dispatch) => {
   return {
     handleLogin: (payload) => {
-      dispatch(login(payload))
+      dispatch(login(payload));
     }
   };
 };
 
-const LoginFormContainer = connect(
+const AuthFormContainer = connect(
   mapStateToProps,
   mapDispatchToProps
-)(LoginForm);
+)(AuthForm);
 
-export default LoginFormContainer;
+export default AuthFormContainer;

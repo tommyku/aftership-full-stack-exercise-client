@@ -1,17 +1,45 @@
 export const LOGIN = 'LOGIN';
 
-export function login({ username, password }) {
-  return (dispatch) => {
+export const login = ({ username, password }) => {
+  return () => {
     const body = JSON.stringify({ username, password });
-    return fetch('http://localhost:3000/login', { method: 'POST', body })
-      .then((res) => (res.ok ? loginSuccess(res) : loginFailure(res)))
-  }
+    return fetch('http://localhost:8080/user/sign_in', { method: 'POST', body })
+      .then((res) => (res.ok ? loginSuccess(res) : loginFailure(res)));
+  };
+};
+
+export const signUp = ({ username, password, appId }) => {
+  return () => {
+    const body = JSON.stringify({ username, password, appId });
+    const request = {
+      method: 'POST',
+      body,
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+    };
+    return fetch('http://localhost:8080/user/sign_up', request)
+      .then((res) => (res.ok ? signUpSuccess(res) : signUpFailure(res)));
+  };
+};
+
+function signUpSuccess(res) {
+  res.json()
+    .then(console.log);
+}
+
+function signUpFailure(res) {
+  res.json()
+    .then(console.log);
 }
 
 function loginSuccess(res) {
-  console.log(res);
-  res.json().then(console.log);
+  res.json()
+    .then(console.log);
 }
 
 function loginFailure(res) {
+  res.json()
+    .then(console.log);
 }

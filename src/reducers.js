@@ -1,15 +1,15 @@
 const initialState = {
   access_token: '',
   flags: {
-    login: false
+    token: null
   }
 };
 
-const linkApp = (state = initialState, action) => {
+const convertyApp = (state = initialState, action) => {
   switch (action.type) {
   default:
     return state;
   }
 };
 
-export default linkApp;
+export default convertyApp;

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
-import linkApp from './reducers';
+import convertyApp from './reducers';
 import thunkMiddleware from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,7 +14,7 @@ let store;
 switch (process.env.NODE_ENV) {
 case 'development':
   store = createStore(
-    linkApp,
+    convertyApp,
     applyMiddleware(
       thunkMiddleware,
       createLogger()
@@ -23,7 +23,7 @@ case 'development':
   break;
 default:
   store = createStore(
-    linkApp,
+    convertyApp,
     applyMiddleware(
       thunkMiddleware
     )

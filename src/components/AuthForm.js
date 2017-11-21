@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class LoginForm extends Component {
+class AuthForm extends Component {
   constructor(props) {
     super(props);
     this.handleLogin = this.handleLogin.bind(this);
@@ -16,7 +17,7 @@ class LoginForm extends Component {
 
   render() {
     return (
-      <form onSubmit={ this.handleLogin }>
+      <form>
         <div>
           <label htmlFor='username'>Username</label>
           <input type='text' name='username' id='username' ref='username' />
@@ -26,15 +27,20 @@ class LoginForm extends Component {
           <input type='password' name='password' id='password' ref='password' />
         </div>
         <div>
-          <input type='submit' />
+          <button type='button' onClick={ this.handleLogin }>Login</button>
+        </div>
+        <div>
+          <Link to='/sign_up'>
+            <button type='button'>Sign up</button>
+          </Link>
         </div>
       </form>
     );
   }
 }
 
-LoginForm.propTypes = {
+AuthForm.propTypes = {
   handleLogin: PropTypes.func.isRequired
-}
+};
 
-export default LoginForm;
+export default AuthForm;
