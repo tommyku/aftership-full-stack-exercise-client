@@ -1,6 +1,8 @@
 import { push } from 'react-router-redux';
 import store from 'store';
 
+const API_HOST = process.env.REACT_APP_API_HOST || 'http://localhost:8080';
+
 export const login = ({ username, password }) => {
   return (dispatch) => {
     const body = JSON.stringify({ username, password });
@@ -12,7 +14,7 @@ export const login = ({ username, password }) => {
         'Content-Type': 'application/json'
       }
     };
-    return fetch('http://localhost:8080/user/sign_in', request)
+    return fetch(`${API_HOST}/user/sign_in`, request)
       .then((res) => (res.ok ? authSuccess(dispatch, res) : noOpsFailure()));
   };
 };
@@ -28,7 +30,7 @@ export const signUp = ({ username, password, appId }) => {
         'Content-Type': 'application/json'
       }
     };
-    return fetch('http://localhost:8080/user/sign_up', request)
+    return fetch(`${API_HOST}/user/sign_up`, request)
       .then((res) => (res.ok ? authSuccess(dispatch, res) : noOpsFailure()));
   };
 };
@@ -43,7 +45,7 @@ export const tokenCheck = (token) => {
         'x-access-token': token
       }
     };
-    return fetch('http://localhost:8080/user', request)
+    return fetch(`${API_HOST}/user`, request)
       .then((res) => (res.ok ? authSuccess(dispatch, res) : tokenActionFailure(res)));
   };
 };
@@ -58,7 +60,7 @@ export const getUserCurrencies = (token) => {
         'x-access-token': token
       }
     };
-    return fetch('http://localhost:8080/usercurrency', request)
+    return fetch(`${API_HOST}/usercurrency`, request)
       .then((res) => (res.ok ? getUserCurrenciesSuccess(dispatch, res) : tokenActionFailure(dispatch, res)));
   };
 };
