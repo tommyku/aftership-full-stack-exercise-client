@@ -13,7 +13,7 @@ export const login = ({ username, password }) => {
       }
     };
     return fetch('http://localhost:8080/user/sign_in', request)
-      .then((res) => (res.ok ? authSuccess(dispatch, res) : loginFailure(res)));
+      .then((res) => (res.ok ? authSuccess(dispatch, res) : noOpsFailure()));
   };
 };
 
@@ -29,7 +29,7 @@ export const signUp = ({ username, password, appId }) => {
       }
     };
     return fetch('http://localhost:8080/user/sign_up', request)
-      .then((res) => (res.ok ? authSuccess(dispatch, res) : signUpFailure(res)));
+      .then((res) => (res.ok ? authSuccess(dispatch, res) : noOpsFailure()));
   };
 };
 
@@ -103,6 +103,21 @@ export const localConversion = ({ from, to, amount, currentConversion }) => {
   };
 };
 
+export const getHistory = ({ from, to, date, appId }) => {
+  return (dispatch) => {
+    const request = {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      }
+    };
+    const url = `https://openexchangerates.org/api/historical/${date}.json?app_id=${appId}`;
+    return fetch(url, request)
+      .then((res) => (res.ok ? getHistorySuccess(dispatch, res, { from, to, date }) : noOpsFailure()));
+  };
+};
+
 function authSuccess(dispatch, res) {
   res.json()
     .then((response) => {
@@ -148,6 +163,25 @@ function getUserCurrenciesSuccess(dispatch, res) {
     });
 }
 
+function getHistorySuccess(dispatch, res, { from, to, date }) {
+  res.json()
+    .then((response) => {
+      const { timestamp, base, rates } = response;
+      const currencyHistory = {
+        base: base,
+        from: from,
+        to: to,
+        date: date,
+        timestamp,
+        rates
+      };
+
+      store.set('currencyHistory', currencyHistory);
+
+      dispatch({ type: '@@converty/GET_HISTORY', payload: currencyHistory });
+    });
+}
+
 function tokenActionFailure(dispatch) {
   store.set('user', null);
   store.set('favoriteCurrencies', null);
@@ -156,14 +190,6 @@ function tokenActionFailure(dispatch) {
   dispatch(push('/auth'));
 }
 
-function signUpFailure(res) {
-  res.json()
-    .then(console.log);
-}
-
-function loginFailure(res) {
-}
-
 function noOpsFailure() {
-  // do nothing
+  // TODO(tommy): error handling
 }

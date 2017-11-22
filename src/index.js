@@ -9,10 +9,15 @@ import { Router, hashHistory } from 'react-router';
 import { syncHistoryWithStore, routerReducer, routerMiddleware } from 'react-router-redux';
 import App from './App';
 import { IndexRoute, Route, Redirect } from 'react-router';
-import { AuthPage, SignUpPage, IndexPage, NotFoundPage } from './pages';
+import { AuthPage, SignUpPage, IndexPage, HistoryPage, NotFoundPage } from './pages';
 import registerServiceWorker from './registerServiceWorker';
+import registerPolyfills from './registerPolyfills';
 import './index.css';
 
+// Polyfills
+registerPolyfills();
+
+// Redux setup
 let store;
 const reducers = combineReducers({
   converty: convertyApp,
@@ -45,6 +50,7 @@ ReactDOM.render(
     <Router history={history}>
       <Route path='/' component={App}>
         <IndexRoute component={IndexPage} />
+        <Route path='history' component={HistoryPage} />
         <Route path='auth' component={AuthPage} />
         <Route path='sign_up' component={SignUpPage} />
         <Route path='404' component={NotFoundPage} />

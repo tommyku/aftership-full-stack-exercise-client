@@ -5,6 +5,7 @@ const favoriteCurrencies = store.get('favoriteCurrencies') || [];
 const currencies = store.get('currencies') || {};
 const currentConversion = store.get('currentConversion') || {};
 const conversionResult = store.get('conversionResult') || {};
+const currencyHistory = store.get('currencyHistory') || {};
 
 const flags = {
   login: (user['username'] && user['appId'] && user['token']) !== null,
@@ -17,11 +18,11 @@ const initialState = {
   currencies,
   flags,
   currentConversion,
-  conversionResult
+  conversionResult,
+  currencyHistory
 };
 
-const convertyApp = (state = initialState, action) => {
-  const convertyAction = action.type.match(/^@@converty\/(.*)$/);
+const convertyApp = (state = initialState, action) => { const convertyAction = action.type.match(/^@@converty\/(.*)$/);
   if (convertyAction) {
     switch (convertyAction[1]) {
     case 'AUTH_SUCCESS':
@@ -51,6 +52,10 @@ const convertyApp = (state = initialState, action) => {
     case 'GET_CURRENCIES':
       return Object.assign({}, state, {
         currencies: action.payload
+      });
+    case 'GET_HISTORY':
+      return Object.assign({}, state, {
+        currencyHistory: action.payload
       });
     case 'TOKEN_ACTION_FAILURE':
     case 'AUTH_FAILURE':

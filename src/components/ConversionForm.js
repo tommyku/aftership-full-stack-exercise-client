@@ -1,17 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-
-const CurrencySelection = ({ setRef, currencies, name, ...others }) => (
-  <select name={ name } id={ name } ref={ setRef } { ...others }>
-    {
-      Object.keys(currencies).map((code, index) => (
-        <option value={ code } key={ `from-${index}` }>
-          { `${code} (${currencies[code]})` }
-        </option>
-      ))
-    }
-  </select>
-);
+import { CurrencySelection } from './';
 
 class ConversionForm extends Component {
   constructor(props) {

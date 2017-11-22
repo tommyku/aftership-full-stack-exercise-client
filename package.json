@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "gh-pages": "^1.1.0",
+    "promise-polyfill": "^6.0.2",
     "prop-types": "^15.6.0",
     "react": "^16.1.1",
     "react-dom": "^16.1.1",
@@ -14,7 +15,8 @@
     "redux": "^3.7.2",
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.2.0",
-    "store": "^2.0.12"
+    "store": "^2.0.12",
+    "whatwg-fetch": "^2.0.3"
   },
   "homepage": "https://exchange.ck2ustudio.com/",
   "scripts": {
